@@ -1,109 +1,100 @@
 Smart Tourism with VR & Fake Review Detection
 
-An AI-powered travel assistant that generates personalized itineraries, detects fake reviews using LSTM, enhances destination images using Real-ESRGAN, and provides immersive Virtual Reality destination previews.
-The system integrates AI + NLP + Deep Learning + VR + GANs to modernize and secure the travel planning experience.
+A modern AI-powered travel assistant that generates personalized itineraries, detects fake reviews using LSTM, enhances destination images using Real-ESRGAN, and offers immersive VR previews.
+Built using AI + NLP + Deep Learning + VR + GANs + Real-Time APIs.
 
-🚀 Project Highlights
-🔹 AI-Based Personalized Travel Planning
+✨ Project Highlights
+• AI-Based Personalized Travel Planning
 
-Generates day-wise itineraries based on:
+Generates day-wise itineraries
 
-Budget
+Uses real-time hotel & flight pricing
 
-Travel dates
+Budget optimization
 
-User preferences
+User-preference filtering
 
-Real-time flight & hotel prices
+Dynamic recalculation
 
-Dynamic budget recalibration
-
-Uses live travel APIs
-
-🔹 Fake Review Detection (LSTM)
+• Fake Review Detection (LSTM Model)
 
 Detects:
 
-Genuine reviews
+Genuine Reviews
 
-Human-written fake reviews
+Human-Written Fake Reviews
 
-GPT-generated fake reviews (optional extension)
+GPT-Generated Fake Reviews
 
-Model Features:
+Includes:
 
-LSTM classifier
+NLP preprocessing
 
-NLP preprocessing (tokenization, stop-words, normalization)
+LSTM deep learning classifier
 
 Accuracy: 93.5%
 
-Precision/Recall balanced
+• Real-ESRGAN Image Upscaling
 
-🔹 Image Upscaling using Real-ESRGAN
-
-Upscales low-resolution destination images
-
-Improves quality for VR previews
-
-Removes blur, restores texture
-
-🔹 VR Destination Preview
-
-Unity-powered 360° virtual exploration
-
-View landmarks before visiting
-
-Enhances user decision-making
-
-🧠 System Architecture
-1) AI Itinerary Generator
-
-Collects user inputs
-
-Fetches real-time data
-
-Builds optimized travel schedules
-
-Recalculates budget dynamically
-
-2) Fake Review Detection Module
-
-LSTM classifier
-
-Preprocessing pipeline
-
-Flags suspicious reviews
-
-Ensures trustworthy content
-
-3) Image Upscaler (Real-ESRGAN)
+Enhances low-resolution destination images
 
 GAN-based super-resolution
 
-Enhances images for web & VR
+Improves clarity for VR previews
 
-4) VR Experience Engine
+• VR Destination Preview
 
-Renders 3D environments
+Unity-based 360° virtual tours
 
-Provides immersive virtual tours
+Explore places before visiting
 
-Databases
+Immersive, interactive experience
 
-tourism.db – itineraries, images, VR resources
+🧠 System Architecture
+1️⃣ Itinerary Generator (AI Module)
 
-reviews.db – user reviews + authenticity tags
+Processes user budget, dates & preferences
 
-🗂 Tech Stack
-Component	Technology
-Backend	Python, Flask
-AI/ML	LSTM, TensorFlow, Keras, Scikit-learn
-NLP	Tokenizer, Padding, Text cleaning
-VR	Unity3D / Three.js
-Image Processing	Real-ESRGAN (PyTorch)
-Database	MongoDB
-Frontend	React Native / Flutter
+Fetches real-time travel data
+
+Generates ideal route & schedule
+
+2️⃣ Fake Review Detection Module
+
+Text cleaning + tokenization
+
+LSTM classification pipeline
+
+Flags deceptive reviews
+
+3️⃣ ESRGAN Image Upscaling
+
+Input: low-resolution images
+
+Output: high-quality VR-ready images
+
+4️⃣ VR Experience Engine
+
+Unity 3D environment
+
+Panoramic view rendering
+
+🗄 Databases
+
+tourism.db – itineraries, VR assets, image paths
+
+reviews.db – reviews + authenticity labels
+
+💻 Tech Stack
+
+Backend: Python, Flask
+AI/ML: TensorFlow, Keras, LSTM, Scikit-learn
+NLP: Tokenizer, stop-word removal, text normalization
+VR: Unity 3D / Three.js
+Image Processing: Real-ESRGAN (PyTorch)
+Frontend: React Native / Flutter
+Database: MongoDB
+
 ⚙️ How to Run the Project
 1. Clone the Repository
 git clone https://github.com/Dhanusree28/smart-tourism-review-detection.git
@@ -111,18 +102,23 @@ cd smart-tourism-review-detection
 
 2. Create Virtual Environment
 python -m venv venv
-venv\Scripts\activate     # Windows
-source venv/bin/activate  # Linux/Mac
+venv\Scripts\activate       # Windows
+source venv/bin/activate    # Linux/Mac
 
 3. Install Dependencies
 pip install -r requirements.txt
 
-4. Run the Flask API
+4. Run the Flask App
 python app.py
 
 5. Run ESRGAN Upscaler
 python upscale.py --input images/ --output results/
 
-6. Open VR Module (Unity Project)
+6. Open VR Module
 
-Open the /vr/UnityProject/ folder in Unity Hub.
+Open the folder:
+
+/vr/UnityProject/
+
+
+in Unity Hub.
