@@ -106,7 +106,7 @@ Database	MongoDB
 Frontend	React Native / Flutter
 ⚙️ How to Run the Project
 1. Clone the Repository
-git clone https://github.com/yourusername/smart-tourism-review-detection.git
+git clone https://github.com/Dhanusree28/smart-tourism-review-detection.git
 cd smart-tourism-review-detection
 
 2. Create Virtual Environment
