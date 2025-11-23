@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Luxurious Hotels</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Header */
+        h1 {
+            font-size: 2.5rem;
+            color: #007bff;
+            margin-bottom: 30px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #333;
+            text-transform: capitalize;
+        }
+
+        p {
+            font-size: 1rem;
+            color: #555;
+            margin: 5px 0;
+        }
+
+        /* Hotel Container */
+        #hotel-container {
+            background-color: #fff;
+            width: 90%;
+            max-width: 1200px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            overflow-y: auto;
+            height: 80%;
+            position: relative;
+        }
+
+        /* Hotel Cards */
+        .hotel {
+            background-color: #f9f9f9;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .hotel:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .hotel img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        /* Styling for lists and reviews */
+        .hotel ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+
+        .hotel .reviews {
+            color: #007bff;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        /* Error/Loading messages */
+        .loading,
+        .error {
+            font-size: 1.2rem;
+            color: #007bff;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .cta-btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .cta-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Check fake review button */
+        .fake-review-btn {
+            padding: 10px 20px;
+            background-color: #f44336;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            margin-top: 20px;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+
+        .fake-review-btn:hover {
+            background-color: #d32f2f;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <h1>Unveil the Best Hotels at Your Dream Destination</h1>
+    <div id="hotel-container" class="loading">Hang tight, we’re finding the best hotels for you...</div>
+
+    <script>
+        const destination = localStorage.getItem('destination');
+
+        async function fetchHotel() {
+            const hotelContainer = document.getElementById('hotel-container');
+
+            if (!destination) {
+                hotelContainer.innerHTML = '<p class="error">Oops! Destination not set. Please select a destination first.</p>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:5000/api/hotels/${encodeURIComponent(destination)}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Error fetching hotel data: ${response.statusText}`);
+                }
+
+                const hotelData = await response.json();
+
+                if (hotelData.hotels && hotelData.hotels.length > 0) {
+                    displayHotel(hotelData.hotels);
+                } else {
+                    hotelContainer.innerHTML = '<p>No hotels found for this destination.</p>';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                hotelContainer.innerHTML = '<p class="error">Something went wrong. Try again later!</p>';
+            }
+        }
+
+        function displayHotel(hotels) {
+            const hotelContainer = document.getElementById('hotel-container');
+            hotelContainer.innerHTML = ''; 
+
+            hotels.forEach(hotel => {
+                const hotelDiv = document.createElement('div');
+                hotelDiv.classList.add('hotel');
+                hotelDiv.innerHTML = `
+                    
+                    <h2>${hotel.name}</h2>
+                    <p><strong>Destination:</strong> ${hotel.destination}</p>
+                    <p><strong>Price:</strong> $${hotel.price}</p>
+                    <p><strong>Rating:</strong> ${hotel.rating} <span style="color: #ff9800;">&#9733;&#9733;&#9733;&#9733;&#9733;</span></p>
+                    <p class="reviews"><strong>Reviews:</strong></p>
+                    <ul>
+                        ${hotel.reviews && hotel.reviews.length > 0
+                            ? hotel.reviews.map(review => `
+                                <li>
+                                    <strong>${review.reviewer}:</strong> ${review.comment} 
+                                    (${new Date(review.date).toLocaleDateString()})
+                                </li>`).join('')
+                            : '<li>No reviews available</li>'}
+                    </ul>
+                    <a href="booking.html" class="cta-btn">Book Now</a>
+                    <a href="a.html" class="fake-review-btn">Check Fake Reviews</a>
+                `;
+                hotelContainer.appendChild(hotelDiv);
+            });
+        }
+
+        window.onload = fetchHotel;
+    </script>
+</body>
+
+</html>

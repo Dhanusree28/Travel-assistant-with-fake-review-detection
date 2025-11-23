@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>360 VR Viewer</title>
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe-zoom-controls@2.0.0/dist/aframe-zoom-controls.min.js"></script>
+</head>
+<body style="margin: 0; overflow: hidden;">
+  <a-scene>
+    <!-- The sky image -->
+    <a-sky src="keralavr.jpg" rotation="0 -130 0"></a-sky>
+   
+    <!-- Camera with zoom controls -->
+    <a-camera position="0 1.6 3" look-controls="pointerLockEnabled: true" zoom-controls="zoomSpeed: 5"></a-camera>
+  </a-scene>
+</body>
+</html>

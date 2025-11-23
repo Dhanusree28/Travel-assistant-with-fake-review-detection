@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Places</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+
+    header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    main {
+      padding: 20px;
+      max-width: 800px;
+      margin: 20px auto;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      padding: 10px 15px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #shopping-places {
+      margin-top: 20px;
+    }
+
+    .shopping-place {
+      padding: 10px;
+      border: 1px solid #ddd;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      background-color: #f9f9f9;
+    }
+
+    .shopping-place h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .shopping-place p {
+      margin: 5px 0;
+    }
+
+    .shopping-place a {
+      color: #4CAF50;
+      text-decoration: none;
+    }
+
+    .shopping-place a:hover {
+      text-decoration: underline;
+    }
+
+    .error-message {
+      color: red;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    iframe {
+      border: 0;
+      width: 100%;
+      height: 300px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Shopping Places</h1>
+  </header>
+
+  <main>
+    <!-- Form for entering travel city and location -->
+    <form id="shopping-form">
+      <label for="city">City of Travel:</label>
+      <input type="text" id="city" name="city" required>
+
+      <label for="location">Location:</label>
+      <input type="text" id="location" name="location" required>
+
+      <button type="submit">Find Shopping Places</button>
+    </form>
+
+    <!-- Display shopping places here -->
+    <div id="shopping-places"></div>
+  </main>
+
+  <script>
+    // Simulate shopping places data for selected cities
+    function getShoppingPlaces(city, location) {
+      const shoppingPlacesData = {
+        "kerala": [
+          { name: "Lulu Mall", location: "Kochi", city: "Kerala", url: "https://www.lulumall.in", lat: 10.0336, lon: 76.3090 },
+          { name: "Sparc Mall", location: "Thiruvananthapuram", city: "Kerala", url: "https://www.sparcmall.com", lat: 8.4867, lon: 76.9517 },
+          { name: "Center Square Mall", location: "Kochi", city: "Kerala", url: "https://www.centersquaremall.com", lat: 9.9810, lon: 76.2819 },
+          { name: "M.G. Road", location: "Kochi", city: "Kerala", url: "https://www.mgroadmall.in", lat: 9.9351, lon: 76.2769 },
+          { name: "Kochi Marine Drive", location: "Kochi", city: "Kerala", url: "https://www.marinedriverkochi.com", lat: 9.9626, lon: 76.2824 }
+        ],
+        "jaipur": [
+          { name: "Johari Bazaar", location: "Jaipur", city: "Jaipur", url: "https://www.joharibazaar.in", lat: 26.9196, lon: 75.8124 },
+          { name: "The Pink Mall", location: "Jaipur", city: "Jaipur", url: "https://www.pinkmalljaipur.com", lat: 26.8967, lon: 75.7369 },
+          { name: "World Trade Park", location: "Jaipur", city: "Jaipur", url: "https://www.wtpjaipur.com", lat: 26.8960, lon: 75.8064 },
+          { name: "Triveni Shopping Complex", location: "Jaipur", city: "Jaipur", url: "https://www.triveni.in", lat: 26.9086, lon: 75.8057 },
+          { name: "Bapu Bazaar", location: "Jaipur", city: "Jaipur", url: "https://www.bapubazaar.in", lat: 26.9222, lon: 75.8050 }
+        ],
+        "goa": [
+          { name: "Caculo Mall", location: "Panaji", city: "Goa", url: "https://www.caculomall.com", lat: 15.5128, lon: 73.8574 },
+          { name: "Mall De Goa", location: "Porvorim", city: "Goa", url: "https://www.malldegoa.com", lat: 15.5499, lon: 73.9404 },
+          { name: "Panjim Market", location: "Panaji", city: "Goa", url: "https://www.panjimmarket.com", lat: 15.4909, lon: 73.8291 },
+          { name: "Calangute Mall", location: "Calangute", city: "Goa", url: "https://www.calangutemall.com", lat: 15.5526, lon: 73.7527 },
+          { name: "Anjuna Flea Market", location: "Anjuna", city: "Goa", url: "https://www.anjunamarket.com", lat: 15.5363, lon: 73.7845 }
+        ],
+        "mumbai": [
+          { name: "Colaba Causeway", location: "Mumbai", city: "Mumbai", url: "https://www.colabacauseway.com", lat: 18.9306, lon: 72.8345 },
+          { name: "Phoenix Mall", location: "Mumbai", city: "Mumbai", url: "https://www.phoenixmall.com", lat: 19.1380, lon: 72.8601 },
+          { name: "Inorbit Mall", location: "Malad", city: "Mumbai", url: "https://www.inorbitmall.com", lat: 19.1931, lon: 72.8582 },
+          { name: "High Street Phoenix", location: "Mumbai", city: "Mumbai", url: "https://www.phoenixmarketcity.com", lat: 19.1342, lon: 72.8365 },
+          { name: "Linking Road", location: "Mumbai", city: "Mumbai", url: "https://www.linkingroadmumbai.com", lat: 19.0046, lon: 72.8401 }
+        ],
+        "delhi": [
+          { name: "Connaught Place", location: "Delhi", city: "Delhi", url: "https://www.connaughtplace.in", lat: 28.6353, lon: 77.2240 },
+          { name: "Dilli Haat", location: "Delhi", city: "Delhi", url: "https://www.dillihaat.com", lat: 28.5920, lon: 77.2049 },
+          { name: "Select City Walk", location: "Saket", city: "Delhi", url: "https://www.selectcitywalk.com", lat: 28.5301, lon: 77.2009 },
+          { name: "Chandni Chowk", location: "Delhi", city: "Delhi", url: "https://www.chandnichowk.in", lat: 28.6561, lon: 77.2305 },
+          { name: "DLF Mall of India", location: "Noida", city: "Delhi", url: "https://www.mallofindia.com", lat: 28.5660, lon: 77.3027 }
+        ]
+      };
+
+      const places = shoppingPlacesData[city.toLowerCase()] || [];
+      return places;
+    }
+
+    document.getElementById('shopping-form').addEventListener('submit', function(event) {
+      event.preventDefault();  // Prevent the form from submitting normally
+
+      // Get the city and location from the form inputs
+      const city = document.getElementById('city').value.trim();
+      const location = document.getElementById('location').value.trim();
+
+      // Clear previous results
+      const container = document.getElementById('shopping-places');
+      container.innerHTML = '';
+
+      if (city && location) {
+        const shoppingPlaces = getShoppingPlaces(city, location);
+
+        if (shoppingPlaces.length === 0) {
+          container.innerHTML = `<p class="error-message">No shopping places found for ${city}.</p>`;
+        } else {
+          shoppingPlaces.forEach(place => {
+            const div = document.createElement('div');
+            div.classList.add('shopping-place');
+            div.innerHTML = `
+              <h3>${place.name}</h3>
+              <p>Location: ${place.location}, ${place.city}</p>
+              <p>Visit: <a href="${place.url}" target="_blank">${place.url}</a></p>
+              <h4>Map:</h4>
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.045474051057!2d${place.lon}!3d${place.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z!5e0!3m2!1sen!2sin!4v1630844455282!5m2!1sen!2sin" width="600" height="300" allowfullscreen="" loading="lazy"></iframe>
+            `;
+            container.appendChild(div);
+          });
+        }
+      } else {
+        container.innerHTML = '<p class="error-message">Please enter both city and location.</p>';
+      }
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TourXplore - Discover the World</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: #f5f5f5;
+    }
+
+    header {
+      background-color: #3b5998;
+      padding: 20px;
+      color: white;
+      text-align: center;
+      font-size: 1.8rem;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      background-color: #333;
+    }
+
+    nav a {
+      color: white;
+      padding: 15px 20px;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+
+    nav a:hover {
+      background-color: #575757;
+    }
+
+    /* Hero Section */
+    .hero {
+      background-image: url('background2.webp');
+      background-size: cover;
+      background-position: center;
+      height: 60vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+
+    /* Section Styles */
+    .section {
+      padding: 50px 20px;
+      text-align: center;
+    }
+
+    .section h2 {
+      font-size: 2.5rem;
+      margin-bottom: 40px;
+      color: #333;
+    }
+
+    .destinations {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+    }
+
+    .destination {
+      background-color: white;
+      margin: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      text-align: left;
+      border-radius: 8px;
+      transition: transform 0.3s ease;
+    }
+
+    .destination:hover {
+      transform: scale(1.05); /* Slightly enlarge on hover */
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .destination img {
+      width: 100%;
+      border-radius: 8px;
+      transition: transform 0.3s ease; /* Smooth hover transition */
+    }
+
+    .destination:hover img {
+      transform: scale(1.05); /* Image scales with card */
+    }
+
+    .destination h3 {
+      font-size: 1.6rem;
+      margin-top: 15px;
+      color: #3b5998;
+    }
+
+    .destination p {
+      color: #555;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #333;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      .destinations {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    TourXplore
+  </header>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="#">Home</a>
+    <a href="list.html">Destinations</a>
+    <a href="#">Services</a>
+    <a href="login.html">Login</a>
+    <a href="signup.html">Sign Up</a>
+    <a href="#">Contact</a>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="hero">
+    <div class="hero-content">
+      <h1>Explore the World with Us</h1>
+      <p>Find your next adventure today</p>
+    </div>
+  </div>
+
+  <!-- Destinations Section -->
+  <section class="section" id="destinations">
+    <h2>Discover Destinations</h2>
+    <div class="destinations">
+      <div class="destination">
+        <a href="jaipur-ar.html" target="_blank">
+          <img src="jaipur.jpg" alt="Jaipur, India">
+          <h3>Jaipur, India</h3>
+          <p>The Pink City known for its palaces and forts.</p>
+        </a>
+      </div>
+      <div class="destination">
+        <a href="kerala-ar.html" target="_blank">
+          <img src="kerala.jpg" alt="Kerala, India">
+          <h3>Kerala, India</h3>
+          <p>The land of backwaters and lush green landscapes.</p>
+        </a>
+      </div>
+      <div class="destination">
+        <a href="varanasi-ar.html" target="_blank">
+          <img src="varanasi.jpg" alt="Varanasi, India">
+          <h3>Varanasi, India</h3>
+          <p>One of the oldest cities, rich in culture and spirituality.</p>
+        </a>
+      </div>
+      <div class="destination">
+        <a href="goa-ar.html" target="_blank">
+          <img src="goa.jpg" alt="Goa, India">
+          <h3>Goa, India</h3>
+          <p>A tropical paradise famous for its beaches and nightlife.</p>
+        </a>
+      </div>
+      <div class="destination">
+        <a href="ladakh-ar.html" target="_blank">
+          <img src="ladakh.jpg" alt="Ladakh, India">
+          <h3>Ladakh, India</h3>
+          <p>A mesmerizing landscape of mountains and monasteries.</p>
+        </a>
+      </div>
+      <div class="destination">
+        <a href="delhi-ar.html" target="_blank">
+          <img src="delhi.jpg" alt="Delhi, India">
+          <h3>Delhi, India</h3>
+          <p>The vibrant capital city known for its rich history and culture.</p>
+        </a>
+      </div>
+      <div class="destination">
+        <a href="mumbai-ar.html" target="_blank">
+          <img src="mumbai.jpg" alt="Mumbai, India">
+          <h3>Mumbai, India</h3>
+          <p>The city of dreams and India's financial hub.</p>
+        </a>
+      </div>
+      <div class="destination">
+        <a href="andaman-ar.html" target="_blank">
+          <img src="andhaman.jpg" alt="Andaman Islands, India">
+          <h3>Andaman Islands, India</h3>
+          <p>Famous for pristine beaches and coral reefs.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2024 TourXplore. All Rights Reserved.
+  </footer>
+
+</body>
+</html>

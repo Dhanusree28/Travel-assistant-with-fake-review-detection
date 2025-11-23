@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <!-- Removed mobile-friendly scaling -->
+  <meta name="viewport" content="width=1024" />
+  <title>Tripzy AI Travel Planner</title>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #chatContainer {
+      width: 800px;
+      height: 600px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      overflow: hidden;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="chatContainer">
+    <iframe
+      id="chatFrame"
+      title="Tripzy AI Chat"
+      src=""
+      loading="lazy"
+      allow="microphone;camera;speaker;clipboard-read;clipboard-write;geolocation;"
+    ></iframe>
+  </div>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      const iframe = document.getElementById("chatFrame");
+      const timestamp = new Date().getTime(); // Prevent cache
+
+      const destination = localStorage.getItem('destination') || 'your destination';
+      const days = localStorage.getItem('days') || '5';
+      const budget = localStorage.getItem('budget') || '50000';
+
+      const query = `Generate a ${days}-day itinerary for ${destination} with a budget of ₹${budget}`;
+      const encodedQuery = encodeURIComponent(query);
+
+      const copilotURL = `https://Tripzy-VwbveB.ai.copilot.live?query=${encodedQuery}&t=${timestamp}`;
+
+      iframe.src = copilotURL;
+    });
+  </script>
+
+</body>
+</html>

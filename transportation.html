@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transportation Options</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+
+    header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    main {
+      padding: 20px;
+      max-width: 800px;
+      margin: 20px auto;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      padding: 10px 15px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #transportation-details {
+      margin-top: 20px;
+    }
+
+    .transport-option {
+      padding: 10px;
+      border: 1px solid #ddd;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      background-color: #f9f9f9;
+    }
+
+    .transport-option h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .transport-option p {
+      margin: 5px 0;
+    }
+
+    .transport-option a {
+      color: #4CAF50;
+      text-decoration: none;
+    }
+
+    .transport-option a:hover {
+      text-decoration: underline;
+    }
+
+    .error-message {
+      color: red;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    .success-message {
+      color: green;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Transportation Options</h1>
+  </header>
+
+  <main>
+    <!-- Form for entering source and destination -->
+    <form id="transportation-form">
+      <label for="source">Source (Latitude, Longitude):</label>
+      <input type="text" id="source" name="source" required placeholder="e.g., 12.9716,77.5946">
+      
+      <label for="destination">Destination (Latitude, Longitude):</label>
+      <input type="text" id="destination" name="destination" required placeholder="e.g., 13.0827,80.2707">
+
+      <button type="submit">Get Transportation Options</button>
+    </form>
+
+    <!-- Display transportation details here -->
+    <div id="transportation-details"></div>
+  </main>
+
+  <script>
+    document.getElementById('transportation-form').addEventListener('submit', function(event) {
+      event.preventDefault();  // Prevent the form from submitting normally
+
+      // Get the source and destination from the form inputs
+      const source = document.getElementById('source').value.split(',');
+      const destination = document.getElementById('destination').value.split(',');
+
+      if (source.length === 2 && destination.length === 2) {
+        // Convert source and destination to numbers (latitude and longitude)
+        const sourceLat = parseFloat(source[0].trim());
+        const sourceLng = parseFloat(source[1].trim());
+        const destLat = parseFloat(destination[0].trim());
+        const destLng = parseFloat(destination[1].trim());
+
+        // Haversine formula to calculate distance in kilometers
+        function haversine(lat1, lon1, lat2, lon2) {
+          const R = 6371; // Radius of the Earth in km
+          const dLat = (lat2 - lat1) * Math.PI / 180;
+          const dLon = (lon2 - lon1) * Math.PI / 180;
+          const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+          const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+          const distance = R * c;
+          return distance;
+        }
+
+        const distance = haversine(sourceLat, sourceLng, destLat, destLng);
+
+        // Calculate costs dynamically based on distance
+        const trainCostPerKm = 0.1; // Example cost per km for train (in USD)
+        const flightCostPerKm = 0.25; // Example cost per km for flight (in USD)
+
+        const trainCost = distance * trainCostPerKm;
+        const flightCost = distance * flightCostPerKm;
+
+        // Convert USD to INR (example conversion rate)
+        const conversionRate = 83; // 1 USD = 83 INR (example rate)
+        const trainCostInINR = trainCost * conversionRate;
+        const flightCostInINR = flightCost * conversionRate;
+
+        // Display transportation options
+        const container = document.getElementById('transportation-details');
+        container.innerHTML = `
+          <div class="transport-option">
+            <h3>Train</h3>
+            <p>Distance: ${distance.toFixed(2)} km</p>
+            <p>Cost: ₹${trainCostInINR.toFixed(2)}</p>
+            <p>Suggested Route: Take the Express Train for a quicker journey.</p>
+            <p>Booking URL: <a href="https://www.train-booking.com" target="_blank">Book Now</a></p>
+          </div>
+          <div class="transport-option">
+            <h3>Flight</h3>
+            <p>Distance: ${distance.toFixed(2)} km</p>
+            <p>Cost: ₹${flightCostInINR.toFixed(2)}</p>
+            <p>Suggested Route: Opt for the direct flight for a faster travel time.</p>
+            <p>Booking URL: <a href="https://www.flight-booking.com" target="_blank">Book Now</a></p>
+          </div>
+        `;
+      } else {
+        const container = document.getElementById('transportation-details');
+        container.innerHTML = '<p class="error-message">Please enter valid source and destination coordinates.</p>';
+      }
+    });
+  </script>
+
+</body>
+</html>

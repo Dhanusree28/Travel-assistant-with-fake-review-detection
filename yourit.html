@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Provide Your Itinerary</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(45deg, #FF512F, #F09819);
+            color: white;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+
+        textarea {
+            resize: none;
+            height: 100px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px 20px;
+            background-color: #FF512F;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #F09819;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Tell Us About Your Itinerary</h1>
+
+        <!-- Display the number of days fetched from localStorage -->
+        <p>Number of Days: <span id="days-display"></span></p>
+
+        <form id="itinerary-form">
+            <label for="activities">Planned Activities</label>
+            <textarea id="activities" placeholder="List your planned activities (one per line)"></textarea>
+
+            <button type="submit">Submit Itinerary</button>
+        </form>
+    </div>
+
+    <script>
+        // Fetch the number of days from localStorage
+        const days = localStorage.getItem('days');
+        document.getElementById('days-display').textContent = days;
+
+        // Handle form submission
+        const form = document.getElementById('itinerary-form');
+        form.onsubmit = (event) => {
+            event.preventDefault(); // Prevent the default form submission behavior
+            
+            // Optional: Save planned activities in localStorage or send to a backend
+            const activities = document.getElementById('activities').value;
+            localStorage.setItem('plannedActivities', activities);
+
+            // Redirect to options.html
+            window.location.href = 'option.html';
+        };
+    </script>
+
+</body>
+</html>

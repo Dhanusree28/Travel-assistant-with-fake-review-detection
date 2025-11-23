@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kerala Tourist Places & 360° VR Viewer</title>
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe-zoom-controls@2.0.0/dist/aframe-zoom-controls.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f9f9f9;
+      text-align: center;
+    }
+    h1 {
+      color: #333;
+    }
+    .places-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .place-card {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: transform 0.2s;
+      width: 200px;
+    }
+    .place-card:hover {
+      transform: scale(1.05);
+    }
+    .place-card img {
+      width: 100%;
+      height: 120px;
+      border-radius: 6px;
+    }
+    .vr-container {
+      display: none;
+      width: 100%;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: black;
+    }
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 10px 15px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      z-index: 10;
+    }
+    .back-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Explore Kerala Tourist Places</h1>
+  <div class="places-container" id="placesContainer">
+    <div class="place-card" onclick="openVR('kerala allepey.jpg')">
+      <img src="kerala allepey.jpg" alt="Kerala Allepey">
+      <h3>Kerala Allepey</h3>
+    </div>
+    <div class="place-card" onclick="openVR('kerala boat.jpg')">
+      <img src="kerala boat.jpg" alt="Kerala Boat">
+      <h3>Kerala Boat</h3>
+    </div>
+    <div class="place-card" onclick="openVR('kerala hill.jpg')">
+      <img src="kerala hill.jpg" alt="Kerala Hill">
+      <h3>Kerala Hill</h3>
+    </div>
+    <div class="place-card" onclick="openVR('kerala lake.jpg')">
+      <img src="kerala lake.jpg" alt="Kerala Lake">
+      <h3>Kerala Lake</h3>
+    </div> <!-- ✅ Fixed Missing Closing </div> -->
+  </div>
+
+  <!-- VR Viewer Container -->
+  <div class="vr-container" id="vrContainer">
+    <button class="back-button" onclick="closeVR()">Back</button>
+    <a-scene>
+      <a-sky id="vrSky" rotation="0 -130 0"></a-sky>
+      <a-camera position="0 1.6 3" fov="90" look-controls zoom-controls="zoomSpeed: 5"></a-camera>
+    </a-scene>
+  </div>
+
+  <script>
+    function openVR(image) {
+      document.getElementById("placesContainer").style.display = "none";
+      document.getElementById("vrContainer").style.display = "block";
+      document.getElementById("vrSky").setAttribute("src", image);
+    }
+
+    function closeVR() {
+      document.getElementById("vrContainer").style.display = "none";
+      document.getElementById("placesContainer").style.display = "flex";
+    }
+  </script>
+
+</body>
+</html>

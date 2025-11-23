@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="title">Tripzy AI Travel Planner</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/i18next@23.11.5/dist/umd/i18next.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #e0eafc, #cfdef3);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #333;
+    }
+
+    .header {
+      background: #1976d2;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+
+    .language-selector {
+      padding: 5px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    .main-container {
+      flex: 1;
+      padding: 20px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .timeline-container {
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .timeline-container h2 {
+      font-size: 1.8rem;
+      color: #1976d2;
+      margin-bottom: 20px;
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 50px;
+      margin-top: 20px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 25px;
+      width: 4px;
+      background: #1976d2;
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 40px;
+      padding-left: 50px;
+    }
+
+    .timeline-item::before {
+      content: attr(data-year);
+      position: absolute;
+      left: 10px;
+      top: 0;
+      width: 40px;
+      height: 40px;
+      background: #1976d2;
+      color: white;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 40px;
+      font-weight: 600;
+      font-size: 14px;
+      z-index: 1;
+    }
+
+    .timeline-content {
+      padding: 15px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.9);
+      transition: transform 0.3s ease;
+      position: relative;
+    }
+
+    .timeline-content:hover {
+      transform: translateY(-5px);
+    }
+
+    .timeline-content p {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #444;
+    }
+
+    .updated-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #4caf50;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    .button-container {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      justify-content: center;
+    }
+
+    .retry-button, .back-button, .clear-cache-button {
+      padding: 7px 14px;
+      border: none;
+      background: #1976d2;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: background 0.3s ease;
+    }
+
+    .retry-button:hover, .back-button:hover, .clear-cache-button:hover {
+      background: #1565c0;
+    }
+
+    .retry-button {
+      display: none;
+    }
+
+    .chat-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #1976d2;
+      color: white;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+
+    .chat-toggle:hover {
+      background: #1565c0;
+      transform: scale(1.1);
+    }
+
+    .chat-box {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      width: 320px;
+      height: 440px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      display: none;
+      z-index: 999;
+    }
+
+    .chat-box iframe {
+      width: 100%;
+      height: 70%;
+      border: none;
+    }
+
+    .suggestion-form {
+      padding: 10px;
+      height: 30%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+    }
+
+    .suggestion-form textarea {
+      resize: none;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    .suggestion-form button {
+      padding: 8px;
+      background: #1976d2;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .suggestion-form button:hover {
+      background: #1565c0;
+    }
+
+    .suggestion-form button:disabled {
+      background: #90a4ae;
+      cursor: not-allowed;
+    }
+
+    .loading-spinner {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #1976d2;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    #error {
+      color: #d32f2f;
+      font-size: 0.9rem;
+      margin: 10px 0;
+    }
+
+    @media (max-width: 768px) {
+      .main-container {
+        padding: 10px;
+      }
+
+      .timeline-container {
+        padding: 10px;
+      }
+
+      .chat-box {
+        width: 90%;
+        height: 400px;
+      }
+
+      .button-container {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <h1 data-i18n="title">Tripzy AI Travel Planner</h1>
+    <select class="language-selector" id="languageSelector">
+      <option value="en">English</option>
+      <option value="hi">हिन्दी</option>
+      <option value="es">Español</option>
+    </select>
+  </header>
+
+  <div class="main-container">
+    <div class="timeline-container">
+      <h2 data-i18n="itinerary_title">Your Trip Itinerary</h2>
+      <div class="timeline" id="timeline"></div>
+      <div id="error"></div>
+      <div class="button-container">
+        <button class="retry-button" id="retry" data-i18n="retry">Retry</button>
+        <button class="clear-cache-button" id="clearCache" data-i18n="clear_cache">Clear Cache</button>
+        <button class="back-button" onclick="window.location.href='goa.html'" data-i18n="back">Back</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-toggle" id="chatToggle" title="Chat with Tripzy 🤖">💬</div>
+  <div class="chat-box" id="chatBox">
+    <iframe
+      id="chatFrame"
+      title="Tripzy AI Chat"
+      src=""
+      loading="lazy"
+      allow="microphone;camera;speaker;clipboard-read;clipboard-write;geolocation;"
+    ></iframe>
+    <div class="suggestion-form">
+      <textarea id="suggestionInput" placeholder="Enter suggestions (e.g., Include a beach visit or cultural tour)" data-i18n="[placeholder]suggestion_placeholder"></textarea>
+      <button id="submitSuggestion" data-i18n="submit_suggestion">Submit Suggestion</button>
+      <div class="loading-spinner" id="loadingSpinner"></div>
+    </div>
+  </div>
+
+  <script>
+    // Translation resources
+    const translations = {
+      en: {
+        title: "Tripzy AI Travel Planner",
+        itinerary_title: "Your Trip Itinerary",
+        retry: "Retry",
+        back: "Back",
+        clear_cache: "Clear Cache",
+        suggestion_placeholder: "Enter suggestions (e.g., Include a beach visit or cultural tour)",
+        submit_suggestion: "Submit Suggestion",
+        suggestion_error: "Please enter a valid suggestion (minimum 5 characters).",
+        suggestion_success: "Suggestion applied! Updated day: ",
+        no_changes: "Suggestion submitted, but no changes detected. Try 'cultural tour', 'adventure activities', or 'shopping'."
+      },
+      hi: {
+        title: "ट्रिपज़ी एआई ट्रैवल प्लानर",
+        itinerary_title: "आपका यात्रा कार्यक्रम",
+        retry: "पुनः प्रयास करें",
+        back: "वापस",
+        clear_cache: "कैश साफ़ करें",
+        suggestion_placeholder: "सुझाव दर्ज करें (उदाहरण: समुद्र तट की यात्रा या सांस्कृतिक दौरा शामिल करें)",
+        submit_suggestion: "सुझाव सबमिट करें",
+        suggestion_error: "कृपया एक मान्य सुझाव दर्ज करें (न्यूनतम 5 अक्षर)।",
+        suggestion_success: "सुझाव लागू किया गया! अपडेट किया गया दिन: ",
+        no_changes: "सुझाव सबमिट किया गया, लेकिन कोई बदलाव नहीं हुआ। 'सांस्कृतिक दौरा', 'साहसिक गतिविधियाँ', या 'खरीदारी' आज़माएं।"
+      },
+      es: {
+        title: "Planificador de Viajes Tripzy AI",
+        itinerary_title: "Tu Itinerario de Viaje",
+        retry: "Reintentar",
+        back: "Volver",
+        clear_cache: "Borrar Caché",
+        suggestion_placeholder: "Ingresa sugerencias (por ejemplo, incluir una visita a la playa o un tour cultural)",
+        submit_suggestion: "Enviar Sugerencia",
+        suggestion_error: "Por favor, ingresa una sugerencia válida (mínimo 5 caracteres).",
+        suggestion_success: "¡Sugerencia aplicada! Día actualizado: ",
+        no_changes: "Sugerencia enviada, pero no se detectaron cambios. Prueba 'tour cultural', 'actividades de aventura' o 'compras'."
+      }
+    };
+
+    // Initialize i18next
+    i18next.init({
+      lng: 'en',
+      resources: {
+        en: { translation: translations.en },
+        hi: { translation: translations.hi },
+        es: { translation: translations.es }
+      }
+    }, () => {
+      updateContent();
+    });
+
+    // Update content with translations
+    function updateContent() {
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (key.startsWith('[placeholder]')) {
+          const actualKey = key.replace('[placeholder]', '');
+          element.placeholder = i18next.t(actualKey);
+        } else {
+          element.textContent = i18next.t(key);
+        }
+      });
+    }
+
+    // Language selector
+    document.getElementById('languageSelector').addEventListener('change', (e) => {
+      i18next.changeLanguage(e.target.value, () => {
+        updateContent();
+      });
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const destination = localStorage.getItem("destination") || "your destination";
+      const days = parseInt(localStorage.getItem("days")) || 5;
+      const budget = parseFloat(localStorage.getItem("budget")) || 50000;
+      let userSuggestions = "";
+      let previousItinerary = JSON.parse(localStorage.getItem("previousItinerary")) || [];
+
+      const timelineDiv = document.getElementById("timeline");
+      const errorDiv = document.getElementById("error");
+      const retryBtn = document.getElementById("retry");
+      const clearCacheBtn = document.getElementById("clearCache");
+      const suggestionInput = document.getElementById("suggestionInput");
+      const submitSuggestionBtn = document.getElementById("submitSuggestion");
+      const loadingSpinner = document.getElementById("loadingSpinner");
+
+      // Load Chatbot
+      const iframe = document.getElementById("chatFrame");
+      const timestamp = new Date().getTime();
+      const query = `Generate a ${days}-day itinerary for ${destination} with a budget of ₹${budget}`;
+      const encodedQuery = encodeURIComponent(query);
+      const copilotURL = `https://Tripzy-VwbveB.ai.copilot.live?query=${encodedQuery}&t=${timestamp}`;
+      iframe.src = copilotURL;
+
+      // Fetch itinerary
+      async function fetchItinerary() {
+        try {
+          errorDiv.textContent = "";
+          timelineDiv.innerHTML = "<p>Loading...</p>";
+          retryBtn.style.display = "none";
+          submitSuggestionBtn.disabled = true;
+          loadingSpinner.style.display = "block";
+
+          const response = await fetch("http://localhost:5000/api/itinerary", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ destination, days, suggestions: userSuggestions })
+          });
+
+          if (!response.ok) throw new Error(`Failed to fetch itinerary: ${response.statusText}`);
+
+          const data = await response.json();
+          console.log("API Response:", data);
+          console.log("Submitted Suggestion:", userSuggestions);
+          console.log("Previous Itinerary:", previousItinerary);
+
+          timelineDiv.innerHTML = "";
+
+          if (data.success && Array.isArray(data.itinerary)) {
+            let updatedDay = null;
+            if (userSuggestions) {
+              // Find the changed day by comparing with previousItinerary
+              for (let i = 0; i < data.itinerary.length; i++) {
+                const prev = previousItinerary[i] || "";
+                if (prev !== data.itinerary[i]) {
+                  updatedDay = i + 1;
+                  break;
+                }
+              }
+            }
+
+            data.itinerary.forEach((activity, index) => {
+              const div = document.createElement("div");
+              div.className = "timeline-item";
+              div.setAttribute("data-year", `Day ${index + 1}`);
+              div.innerHTML = `
+                <div class="timeline-content">
+                  <p>${activity}</p>
+                  ${userSuggestions && updatedDay === index + 1 ? '<span class="updated-badge">Updated</span>' : ''}
+                </div>
+              `;
+              timelineDiv.appendChild(div);
+            });
+
+            localStorage.setItem("previousItinerary", JSON.stringify(data.itinerary));
+            previousItinerary = [...data.itinerary];
+
+            if (userSuggestions) {
+              if (updatedDay) {
+                errorDiv.textContent = i18next.t("suggestion_success") + updatedDay;
+                errorDiv.style.color = "#4caf50";
+              } else {
+                errorDiv.textContent = i18next.t("no_changes");
+                errorDiv.style.color = "#d32f2f";
+              }
+            }
+          } else {
+            throw new Error(data.error || "Invalid data received");
+          }
+        } catch (err) {
+          console.error("Error:", err);
+          timelineDiv.innerHTML = "";
+          errorDiv.textContent = err.message;
+          errorDiv.style.color = "#d32f2f";
+          retryBtn.style.display = "inline-block";
+        } finally {
+          submitSuggestionBtn.disabled = false;
+          loadingSpinner.style.display = "none";
+        }
+      }
+
+      // Handle suggestion submission
+      submitSuggestionBtn.addEventListener("click", () => {
+        const suggestion = suggestionInput.value.trim();
+        if (!suggestion || suggestion.length < 5) {
+          errorDiv.textContent = i18next.t("suggestion_error");
+          errorDiv.style.color = "#d32f2f";
+          return;
+        }
+        userSuggestions = suggestion;
+        suggestionInput.value = "";
+        errorDiv.textContent = "";
+        fetchItinerary();
+      });
+
+      // Clear cache
+      clearCacheBtn.addEventListener("click", () => {
+        localStorage.removeItem("previousItinerary");
+        previousItinerary = [];
+        errorDiv.textContent = "Cache cleared. Submit a new suggestion to generate a fresh itinerary.";
+        errorDiv.style.color = "#4caf50";
+      });
+
+      retryBtn.onclick = fetchItinerary;
+      fetchItinerary(); // Fetch initial itinerary from database
+
+      // Chat toggle logic
+      const chatToggle = document.getElementById("chatToggle");
+      const chatBox = document.getElementById("chatBox");
+
+      chatToggle.addEventListener("click", () => {
+        chatBox.style.display = chatBox.style.display === "block" ? "none" : "block";
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Detailed Budget Breakdown</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 40px;
+      color: #333;
+    }
+    .container {
+      background: #fff;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      max-width: 700px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      color: #007BFF;
+    }
+    h3 {
+      margin-top: 30px;
+      color: #555;
+    }
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    li {
+      margin-bottom: 8px;
+    }
+    .back-btn {
+      margin-top: 30px;
+      display: inline-block;
+      background-color: #007BFF;
+      color: #fff;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Detailed Budget Breakdown (Per Day)</h1>
+    <div id="budget"></div>
+    <a href="aiit.html" class="back-btn">← Back to Itinerary</a>
+  </div>
+
+  <script>
+    function renderBudget(budgetData) {
+      return `
+        <h3>Accommodation</h3>
+        <ul>
+          <li>Hotel: ${budgetData.accommodation.hotel}</li>
+          <li>Taxes: ${budgetData.accommodation.taxes}</li>
+          <li>Service Fees: ${budgetData.accommodation.fees}</li>
+        </ul>
+
+        <h3>Food</h3>
+        <ul>
+          <li>Breakfast: ${budgetData.food.breakfast}</li>
+          <li>Lunch: ${budgetData.food.lunch}</li>
+          <li>Dinner: ${budgetData.food.dinner}</li>
+          <li>Snacks: ${budgetData.food.snacks}</li>
+        </ul>
+
+        <h3>Transport</h3>
+        <ul>
+          <li>Local Travel: ${budgetData.transport.local}</li>
+          <li>Intercity: ${budgetData.transport.intercity}</li>
+          <li>Emergency: ${budgetData.transport.emergency}</li>
+        </ul>
+
+        <h3>Activities</h3>
+        <ul>
+          <li>Tickets: ${budgetData.activities.tickets}</li>
+          <li>Rentals: ${budgetData.activities.rentals}</li>
+          <li>Guides: ${budgetData.activities.guides}</li>
+        </ul>
+      `;
+    }
+
+    const budgetJSON = localStorage.getItem("budgetData");
+    const budget = budgetJSON ? JSON.parse(budgetJSON) : null;
+
+    if (budget) {
+      document.getElementById("budget").innerHTML = renderBudget(budget);
+    } else {
+      document.getElementById("budget").innerHTML = "<p>Budget data not found. Please go back and generate an itinerary.</p>";
+    }
+  </script>
+</body>
+</html>

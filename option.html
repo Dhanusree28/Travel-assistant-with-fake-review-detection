@@ -1,0 +1,112 @@
+
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Options</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #4c83ff, #a0c4ff);
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            color: #333;
+            border-radius: 10px;
+            padding: 20px;
+            width: 200px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .card img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            font-size: 1.2rem;
+            margin: 0;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Choose Your Next Step</h1>
+        <div class="options">
+            <!-- Card for each option -->
+            <div class="card" onclick="navigateTo('transportation')">
+                <img src="transp.png" alt="Transportation">
+                <p>Transportation Booking</p>
+            </div>
+            <div class="card" onclick="navigateTo('hotels')">
+                <img src="hot.jpeg" alt="Hotels">
+                <p>Hotels</p>
+            </div>
+            <div class="card" onclick="navigateTo('weather')">
+                <img src="weth.jpeg" alt="Weather">
+                <p>Weather</p>
+            </div>
+            <div class="card" onclick="navigateTo('shopping')">
+                <img src="shop.png" alt="Shopping">
+                <p>Shopping Places</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to navigate to specific pages
+        function navigateTo(page) {
+            if (page === 'transportation') {
+                window.location.href = 'transportation.html'; // Redirect to Transportation Booking
+            } else if (page === 'hotels') {
+                window.location.href = 'hotel.html'; // Redirect to Hotels
+            } else if (page === 'weather') {
+                window.location.href = 'weather.html'; // Redirect to Weather
+            } else if (page === 'shopping') {
+                window.location.href = 'shopping.html'; // Redirect to Shopping Places
+            }
+        }
+    </script>
+</body>
+</html>

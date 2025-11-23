@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Forecast</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #eef2f3;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            background-color: #3b82f6;
+            color: white;
+            width: 100%;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        header p {
+            margin: 5px 0 0;
+            font-size: 1rem;
+        }
+
+        main {
+            margin-top: 20px;
+            padding: 20px;
+            width: 100%;
+            max-width: 800px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .loading {
+            text-align: center;
+            font-size: 1rem;
+            color: #777;
+        }
+
+        .weather-block {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .weather-block:last-child {
+            border-bottom: none;
+        }
+
+        .weather-block h3 {
+            margin: 0;
+            font-size: 1rem;
+            color: #444;
+        }
+
+        .weather-block p {
+            margin: 5px 0;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .weather-block.alert {
+            background-color: #fee2e2;
+            border-left: 4px solid #e74c3c;
+            padding-left: 10px;
+        }
+
+        footer {
+            margin-top: 20px;
+            padding: 10px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🌦️ Weather Forecast</h1>
+        <p id="destination-display"></p>
+    </header>
+    <main>
+        <div id="weather-info">
+            <p class="loading">🌍 Fetching weather data...</p>
+        </div>
+    </main>
+    <footer>
+        <p>Powered by OpenWeatherMap 🌐</p>
+    </footer>
+
+    <script>
+        const destination = localStorage.getItem('destination');
+        const destinationDisplay = document.getElementById('destination-display');
+        const weatherInfo = document.getElementById('weather-info');
+
+        if (destination) {
+            destinationDisplay.textContent = `Location: ${destination}`;
+            fetchWeather(destination);
+        } else {
+            destinationDisplay.textContent = 'Destination not set. ❓';
+            weatherInfo.innerHTML = '<p>Please set a destination first.</p>';
+        }
+
+        function fetchWeather(location) {
+            const apiKey = 'e494fad7a3e89035b8ea1c03fbf9032b'; // Replace with your OpenWeatherMap API key
+            const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(location)}&units=metric&appid=${apiKey}`;
+
+            weatherInfo.innerHTML = '<p class="loading">🌍 Fetching weather data...</p>';
+
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Unable to fetch weather data');
+                    }
+                    return response.json();
+                })
+                .then(data => displayWeather(data))
+                .catch(error => {
+                    weatherInfo.innerHTML = `<p class="loading">⚠️ Error: ${error.message}</p>`;
+                });
+        }
+
+        function displayWeather(data) {
+            weatherInfo.innerHTML = '';
+            const { list } = data;
+
+            list.forEach((day) => {
+                const date = new Date(day.dt * 1000);
+                const options = { weekday: 'short', month: 'short', day: 'numeric' };
+                const dateString = date.toLocaleDateString('en-US', options);
+                const temp = day.main.temp;
+                const description = day.weather[0].description;
+                const isAlert = checkForCalamity(day);
+                const emoji = getWeatherEmoji(day.weather[0].main);
+
+                const weatherBlock = document.createElement('div');
+                weatherBlock.classList.add('weather-block');
+                if (isAlert) weatherBlock.classList.add('alert');
+                weatherBlock.innerHTML = `
+                    <div>
+                        <h3>${emoji} ${dateString}</h3>
+                        <p>${description}</p>
+                    </div>
+                    <div>
+                        <p>${temp}°C</p>
+                        ${isAlert ? `<p><strong>🚨 Alert:</strong> ${isAlert}</p>` : ''}
+                    </div>
+                `;
+                weatherInfo.appendChild(weatherBlock);
+            });
+        }
+
+        function checkForCalamity(day) {
+            const temp = day.main.temp;
+            const windSpeed = day.wind.speed;
+            const weather = day.weather[0].main.toLowerCase();
+
+            if (temp > 40) return 'Extreme heat warning! 🔥';
+            if (windSpeed > 20) return 'High wind speeds; possible storm. 🌬️';
+            if (weather.includes('rain') && day.rain && day.rain['3h'] > 30)
+                return 'Heavy rainfall warning! 🌧️';
+            if (weather.includes('storm')) return 'Severe storm alert! ⛈️';
+            return null;
+        }
+
+        function getWeatherEmoji(weather) {
+            const conditions = {
+                Clear: '☀️',
+                Clouds: '☁️',
+                Rain: '🌧️',
+                Thunderstorm: '⛈️',
+                Snow: '❄️',
+                Mist: '🌫️',
+                Fog: '🌫️',
+            };
+            return conditions[weather] || '🌍';
+        }
+    </script>
+</body>
+</html>

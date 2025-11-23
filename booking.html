@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Booking - Dolphin and Island Cruise with Hotel Stay</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f9ff;
+      color: #333;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+    .booking-form {
+      flex: 1;
+      min-width: 300px;
+    }
+    .order-summary {
+      flex-basis: 350px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .timer {
+      background: #ffe6e6;
+      color: #d32f2f;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    .booking-form h2 {
+      font-size: 28px;
+      color: #003366;
+      margin-bottom: 10px;
+    }
+    .secure {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: #388e3c;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 5px;
+    }
+    .form-group label.required::after {
+      content: '*';
+      color: #d32f2f;
+      margin-left: 5px;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+    .form-note {
+      font-size: 14px;
+      color: #555;
+      margin-top: 5px;
+    }
+    .payment-info {
+      margin-top: 20px;
+    }
+    .payment-info div {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: #388e3c;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+    .go-to-payment {
+      background-color: #0071eb;
+      color: white;
+      border: none;
+      padding: 15px;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s ease;
+      margin-top: 20px;
+    }
+    .go-to-payment:hover {
+      background-color: #005bb5;
+    }
+    .order-summary h3 {
+      font-size: 20px;
+      color: #003366;
+      margin-bottom: 15px;
+    }
+    .order-summary .cruise-details img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    .order-summary .rating {
+      color: #ffc107;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    .order-summary .item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+      font-size: 14px;
+      color: #555;
+    }
+    .order-summary .item i {
+      color: #0071eb;
+    }
+    .order-summary .promo {
+      font-size: 14px;
+      color: #0071eb;
+      text-decoration: underline;
+      margin-bottom: 15px;
+      display: block;
+      cursor: pointer;
+    }
+    .order-summary .change-date-form {
+      display: none;
+      margin-bottom: 15px;
+    }
+    .order-summary .change-date-form input[type="date"],
+    .order-summary .change-date-form select {
+      width: 70%;
+      padding: 8px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    .order-summary .change-date-form button {
+      background-color: #0071eb;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      font-size: 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .order-summary .change-date-form button:hover {
+      background-color: #005bb5;
+    }
+    .order-summary .total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
+      margin-top: 20px;
+      padding-top: 10px;
+      border-top: 1px solid #e0e0e0;
+    }
+    .order-summary .taxes {
+      font-size: 12px;
+      color: #777;
+      text-align: right;
+    }
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      .order-summary {
+        flex-basis: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="booking-form">
+    <div class="timer"><i class="fas fa-clock"></i> We'll hold your spot for 27:36 minutes.</div>
+    <h2>Enter your personal details</h2>
+    <div class="secure"><i class="fas fa-lock"></i> Checkout is fast and secure</div>
+    <form id="bookingForm">
+      <div class="form-group">
+        <label class="required" for="full-name">Full name</label>
+        <input type="text" id="full-name" name="full-name" required>
+      </div>
+      <div class="form-group">
+        <label class="required" for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="country">Country</label>
+        <select id="country" name="country">
+          <option value="India">India (+91)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="required" for="phone">Mobile phone number</label>
+        <input type="tel" id="phone" name="phone" required>
+        <div class="form-note">We'll only contact you with essential updates or changes to your booking</div>
+      </div>
+      <div class="payment-info">
+        <div><i class="fas fa-check-circle"></i> Pay nothing today</div>
+        <div><i class="fas fa-check-circle"></i> Book now and pay later</div>
+        <div><i class="fas fa-check-circle"></i> Free cancellation until 10:00 AM on May 12</div>
+      </div>
+      <button type="button" class="go-to-payment" onclick="goToPayment()">Go to payment</button>
+    </form>
+  </div>
+
+  <div class="order-summary">
+    <h3>Order summary</h3>
+    <div class="cruise-details">
+      <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" alt="Dolphin and Island Cruise">
+      <div class="rating"><i class="fas fa-star"></i> 4.6/5 (620)</div>
+      <div class="item">
+        <i class="fas fa-ship"></i>
+        <span>Goa Coastal Adventure: Dolphin and Island Cruise • Language: English, Hindi</span>
+      </div>
+      <div class="item" id="date-item">
+        <i class="fas fa-calendar-alt"></i>
+        <span id="selected-date">Tuesday, May 13, 2025 at 10:00 AM</span>
+      </div>
+      <div class="item" id="participants-item">
+        <i class="fas fa-users"></i>
+        <span id="selected-participants">2 adults (Age 12 - 80)</span>
+      </div>
+      <div class="item" id="hotel-details">
+        <i class="fas fa-hotel"></i> Hotel: Taj Exotica Resort & Spa, Benaulim, South Goa
+      </div>
+      <a href="#" class="promo" onclick="toggleDateForm(event)">Change date or participants</a>
+      <div class="change-date-form" id="changeDateForm">
+        <input type="date" id="new-date" min="2025-04-29">
+        <select id="new-participants">
+          <option value="1">1 adult</option>
+          <option value="2" selected>2 adults</option>
+          <option value="3">3 adults</option>
+          <option value="4">4 adults</option>
+        </select>
+        <button onclick="updateDateParticipants()">Update</button>
+      </div>
+      <div class="item"><i class="fas fa-check-circle"></i> Free cancellation until 10:00 AM on May 12</div>
+      <div class="item"><i class="fas fa-thumbs-up"></i> Great value: Customers rated this 4.6/5 for value for money</div>
+      <div class="total">
+        <span>Total</span>
+        <span>₹10,707.00</span>
+      </div>
+      <div class="taxes">Includes taxes and fees</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function toggleDateForm(event) {
+    event.preventDefault();
+    const form = document.getElementById('changeDateForm');
+    form.style.display = form.style.display === 'block' ? 'none' : 'block';
+  }
+
+  function updateDateParticipants() {
+    const newDate = document.getElementById('new-date').value;
+    const participants = document.getElementById('new-participants').value;
+
+    if (newDate) {
+      const formattedDate = new Date(newDate).toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+      document.getElementById('selected-date').textContent = `${formattedDate} at 10:00 AM`;
+    }
+
+    document.getElementById('selected-participants').textContent = `${participants} adult${participants > 1 ? 's' : ''} (Age 12 - 80)`;
+    document.getElementById('changeDateForm').style.display = 'none';
+  }
+
+  function goToPayment() {
+    // Get form data
+    const fullName = document.getElementById('full-name').value;
+    const email = document.getElementById('email').value;
+    const country = document.getElementById('country').value;
+    const phone = document.getElementById('phone').value;
+
+    // Get order summary data
+    const cruiseName = document.querySelector('.order-summary .item span').textContent;
+    const selectedDate = document.getElementById('selected-date').textContent;
+    const participants = document.getElementById('selected-participants').textContent;
+    const hotel = document.getElementById('hotel-details').textContent.replace(' Hotel: ', '');
+    const total = document.querySelector('.total span:last-child').textContent;
+
+    // Basic validation
+    if (!fullName || !email || !phone) {
+      alert('Please fill in all required fields (Full Name, Email, Phone).');
+      return;
+    }
+
+    // Store data in localStorage
+    const bookingDetails = {
+      fullName,
+      email,
+      country,
+      phone,
+      cruiseName,
+      selectedDate,
+      participants,
+      hotel,
+      total
+    };
+    localStorage.setItem('bookingDetails', JSON.stringify(bookingDetails));
+
+    // Redirect to payment page
+    window.location.href = 'pay.html';
+  }
+</script>
+</body>
+</html>

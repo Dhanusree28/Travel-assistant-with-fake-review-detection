@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Goa Tourist Places & 360° VR Viewer</title>
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe-zoom-controls@2.0.0/dist/aframe-zoom-controls.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f9f9f9;
+      text-align: center;
+    }
+    h1, h2 {
+      color: #333;
+    }
+    h2 {
+      margin-top: 40px;
+      font-size: 24px;
+    }
+    .places-container, .google-earth-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .place-card, .google-earth-card {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: transform 0.2s;
+      width: 200px;
+    }
+    .place-card:hover, .google-earth-card:hover {
+      transform: scale(1.05);
+    }
+    .place-card img, .google-earth-card img {
+      width: 100%;
+      height: 120px;
+      border-radius: 6px;
+    }
+    .vr-container {
+      display: none;
+      width: 100%;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: black;
+    }
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 10px 15px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      z-index: 10;
+    }
+    .back-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Explore Goa Tourist Places</h1>
+  <h2>360° VR Experiences</h2>
+  <div class="places-container" id="placesContainer">
+    <div class="place-card" onclick="openVR('upscalemedia-transformed.jpeg')">
+      <img src="upscalemedia-transformed.jpeg" alt="Jaipur Isar City">
+      <h3>Baga Beach</h3>
+    </div>
+    <div class="place-card" onclick="openVR('upscalemedia-transformed2.jpeg')">
+      <img src="upscalemedia-transformed2.jpeg.jpg" alt="Jaipur City Place">
+      <h3>Calangute Beach</h3>
+    </div>
+    <div class="place-card" onclick="openVR('upscalemedia-transformed (1).jpeg.jpg')">
+      <img src="upscalemedia-transformed (1).jpeg.jpg" alt="Jaipur Hawa Mahal">
+      <h3>Dudhsagar Falls</h3>
+    </div>
+    <div class="place-card" onclick="openVR('upscalemedia-transformed 3.jpeg')">
+      <img src="upscalemedia-transformed 3.jpeg" alt="Jaipur Nahargarh Fort">
+      <h3>Fort Aguada</h3>
+    </div>
+  </div>
+
+  <h2>Explore in Google Earth</h2>
+  <div class="google-earth-container">
+    <div class="google-earth-card" onclick="openGoogleEarth('https://earth.app.goo.gl/?apn=com.google.earth&isi=293622097&ius=googleearth&link=https%3a%2f%2fearth.google.com%2fweb%2fsearch%2fBaga%2bBeach,%2bBaga,%2bGoa%2f%4015.56230512,73.74937998,20.16980926a,0d,73.15416377y,358.76213072h,85.73020544t,0r%2fdata%3dCoQBGlYSUAolMHgzYmJmZWExZTc0M2FjY2Q1OjB4YzY4Y2Y3NWM3NzllYjYxYhlVDz3O2R8vQCGyRdJu9G9SQCoVQmFnYSBCZWFjaCwgQmFnYSwgR29hGAEgASImCiQJuRp-vWUlM0ARMKdV4mQlM8AZfbNXA9WgSEAhGIhec5hiScBCAggBIhoKFlJDMVdZaWNBVkFkd0hDRm0zNk5GcVEQAjoDCgEwQgIIAEoNCP___________wEQAA')">
+      <img src="upscalemedia-transformed.jpeg" alt="Baga Beach">
+      <h3>Baga Beach</h3>
+    </div>
+    <div class="google-earth-card" onclick="openGoogleEarth('https://earth.app.goo.gl/?apn=com.google.earth&isi=293622097&ius=googleearth&link=https%3a%2f%2fearth.google.com%2fweb%2fsearch%2fCalangute%2bBeach,%2bGoa%2f%4015.XXXXX,73.XXXXX,20a,0d,0y,0h,0t,0r%2fdata%3dDUMMY')">
+      <img src="upscalemedia-transformed2.jpeg.jpg" alt="Calangute Beach">
+      <h3>Calangute Beach</h3>
+    </div>
+    <div class="google-earth-card" onclick="openGoogleEarth('https://earth.app.goo.gl/?apn=com.google.earth&isi=293622097&ius=googleearth&link=https%3a%2f%2fearth.google.com%2fweb%2fsearch%2fDudhsagar%2bFalls,%2bGoa%2f%4015.XXXXX,74.XXXXX,20a,0d,0y,0h,0t,0r%2fdata%3dDUMMY')">
+      <img src="upscalemedia-transformed (1).jpeg.jpg" alt="Dudhsagar Falls">
+      <h3>Dudhsagar Falls</h3>
+    </div>
+    <div class="google-earth-card" onclick="openGoogleEarth('https://earth.app.goo.gl/?apn=com.google.earth&isi=293622097&ius=googleearth&link=https%3a%2f%2fearth.google.com%2fweb%2fsearch%2fFort%2bAguada,%2bGoa%2f%4015.XXXXX,73.XXXXX,20a,0d,0y,0h,0t,0r%2fdata%3dDUMMY')">
+      <img src="upscalemedia-transformed 3.jpeg" alt="Fort Aguada">
+      <h3>Fort Aguada</h3>
+    </div>
+  </div>
+
+  <!-- VR Viewer Container -->
+  <div class="vr-container" id="vrContainer">
+    <button class="back-button" onclick="closeVR()">Back</button>
+    <a-scene>
+      <a-sky id="vrSky" rotation="0 -130 0"></a-sky>
+      <a-camera position="0 1.6 3" fov="80" look-controls="pointerLockEnabled: true" zoom-controls="zoomSpeed: 5"></a-camera>
+    </a-scene>
+  </div>
+
+  <script>
+    function openVR(image) {
+      document.getElementById("placesContainer").style.display = "none";
+      document.getElementById("vrContainer").style.display = "block";
+      document.getElementById("vrSky").setAttribute("src", image);
+    }
+
+    function closeVR() {
+      document.getElementById("vrContainer").style.display = "none";
+      document.getElementById("placesContainer").style.display = "flex";
+    }
+
+    function openGoogleEarth(url) {
+      window.open(url, '_blank');
+    }
+  </script>
+</body>
+</html>
